@@ -1,0 +1,16 @@
+.vs/
+bin/
+obj/
+**/bin/
+**/obj/
+logs/
+publish/
+.env
+.env.local
+appsettings.Local.json
+appsettings.Production.json
+*.user
+*.suo
+*.log
+.DS_Store
+Thumbs.db

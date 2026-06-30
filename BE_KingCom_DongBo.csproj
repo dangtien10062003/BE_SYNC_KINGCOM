@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="KingCom.Application\KingCom.Application.csproj" />
+    <ProjectReference Include="KingCom.Domain\KingCom.Domain.csproj" />
+    <ProjectReference Include="KingCom.Infrastructure\KingCom.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="KingCom.Application\**\*.cs" />
+    <Compile Remove="KingCom.Domain\**\*.cs" />
+    <Compile Remove="KingCom.Infrastructure\**\*.cs" />
+  </ItemGroup>
+</Project>

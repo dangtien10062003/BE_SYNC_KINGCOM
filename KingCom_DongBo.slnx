@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BE_KingCom_DongBo.csproj" />
+  <Project Path="KingCom.Application/KingCom.Application.csproj" />
+  <Project Path="KingCom.Domain/KingCom.Domain.csproj" />
+  <Project Path="KingCom.Infrastructure/KingCom.Infrastructure.csproj" />
+</Solution>
