@@ -93,6 +93,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+var swaggerEnabled = builder.Configuration.GetValue("Swagger:Enabled", false);
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -108,18 +109,21 @@ app.UseExceptionHandler(errorApp =>
 });
 
 app.UseCors();
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+if (swaggerEnabled)
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "KingCom Dong Bo API v1");
-    options.RoutePrefix = "swagger";
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "KingCom Dong Bo API v1");
+        options.RoutePrefix = "swagger";
+    });
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.Use(async (context, next) =>
 {
     var auth = context.RequestServices.GetRequiredService<IOptionsMonitor<AuthOptions>>().CurrentValue;
-    if (!auth.Enabled || IsPublicApi(context.Request.Path) || context.User.Identity?.IsAuthenticated == true)
+    if (!auth.Enabled || IsPublicApi(context.Request.Path, swaggerEnabled) || context.User.Identity?.IsAuthenticated == true)
     {
         await next();
         return;
@@ -284,11 +288,11 @@ app.MapGet("/api/sync/logs", (JsonlSyncLogger logger, int? take) =>
 
 app.Run();
 
-static bool IsPublicApi(PathString path)
+static bool IsPublicApi(PathString path, bool swaggerEnabled)
 {
     return path.StartsWithSegments("/api/health")
         || path.StartsWithSegments("/api/auth")
-        || path.StartsWithSegments("/swagger");
+        || (swaggerEnabled && path.StartsWithSegments("/swagger"));
 }
 
 static bool IsAdmin(HttpContext context)
