@@ -6,6 +6,7 @@ obj/
 logs/
 publish/
 .env
+*.env
 .env.local
 appsettings.Local.json
 appsettings.Production.json

@@ -26,9 +26,11 @@ public static class DependencyInjection
         services.AddSingleton(new AuthSqlConnectionFactory(authConnection));
         services.AddSingleton<AuthUserStore>();
         services.AddSingleton<JsonlSyncLogger>();
+        services.AddSingleton<InventorySyncGate>();
         services.AddScoped<InventoryReader>();
         services.AddHttpClient<HaravanClient>();
         services.AddScoped<InventorySyncService>();
+        services.AddHostedService<AutomaticInventorySyncWorker>();
 
         return services;
     }

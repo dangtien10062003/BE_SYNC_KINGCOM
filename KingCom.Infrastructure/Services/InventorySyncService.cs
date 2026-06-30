@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace KingCom.Infrastructure.Services;
 
-public sealed class InventorySyncService(InventoryReader reader, HaravanClient haravan, JsonlSyncLogger logger, IConfiguration config)
+public sealed class InventorySyncService(InventoryReader reader, HaravanClient haravan, JsonlSyncLogger logger, IConfiguration config, InventorySyncGate gate)
 {
     private readonly HaravanOptions _options = config.GetSection("Haravan").Get<HaravanOptions>() ?? new HaravanOptions();
 
@@ -116,6 +116,11 @@ public sealed class InventorySyncService(InventoryReader reader, HaravanClient h
     }
 
     public async Task<SyncResult> SyncAsync(bool dryRun, CancellationToken cancellationToken = default)
+    {
+        return await gate.RunExclusiveAsync(() => SyncCoreAsync(dryRun, cancellationToken), cancellationToken);
+    }
+
+    private async Task<SyncResult> SyncCoreAsync(bool dryRun, CancellationToken cancellationToken)
     {
         var analyze = await AnalyzeAsync(cancellationToken);
         var targets = analyze.Items.Where(item => item.Status == "matched_update").ToList();

@@ -206,6 +206,7 @@ app.MapGet("/api/config/status", (IConfiguration config) =>
 {
     var haravan = config.GetSection("Haravan").Get<HaravanOptions>() ?? new HaravanOptions();
     var inventory = config.GetSection("Inventory").Get<InventoryOptions>() ?? new InventoryOptions();
+    var sync = config.GetSection("Sync").Get<SyncOptions>() ?? new SyncOptions();
     return Results.Ok(new
     {
         sqlConfigured = !string.IsNullOrWhiteSpace(config.GetConnectionString("DefaultConnection")),
@@ -216,7 +217,9 @@ app.MapGet("/api/config/status", (IConfiguration config) =>
         hasHcmLocation = !string.IsNullOrWhiteSpace(haravan.LocationHcmId),
         hasHnLocation = !string.IsNullOrWhiteSpace(haravan.LocationHnId),
         haravan.BatchSize,
-        haravan.BlockWrites
+        haravan.BlockWrites,
+        sync.AutoEnabled,
+        sync.AutoIntervalMinutes
     });
 });
 
