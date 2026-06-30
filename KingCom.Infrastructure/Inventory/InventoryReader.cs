@@ -52,7 +52,7 @@ public sealed class InventoryReader(SqlConnectionFactory factory, IConfiguration
         if (string.IsNullOrWhiteSpace(cleaned)) throw new InvalidOperationException("Inventory:StockQuery dang rong.");
         if (cleaned.Contains(';')) throw new InvalidOperationException("Chi cho phep mot cau SELECT.");
 
-        var firstWord = cleaned.Split([' ', '\r', '\n', '\t'], StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.ToLowerInvariant();
+        var firstWord = cleaned.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.ToLowerInvariant();
         if (firstWord is not ("select" or "with")) throw new InvalidOperationException("Inventory:StockQuery phai bat dau bang SELECT hoac WITH.");
         if (DangerousSql.IsMatch(cleaned)) throw new InvalidOperationException("Inventory:StockQuery chua keyword nguy hiem.");
         return cleaned;
